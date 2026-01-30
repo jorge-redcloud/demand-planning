@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project implements a demand forecasting system for ACA (African Cash & Carry) distributors across South Africa. The system predicts weekly revenue at three levels: SKU, Category, and Customer.
+This project implements a demand forecasting system for ACA distributors across South Africa. The system predicts weekly revenue at three levels: SKU, Category, and Customer.
 
 ### Business Context
 - **Client**: RedCloud / ACA Hardware distributors
@@ -50,19 +50,12 @@ demand_planning/
 │   ├── forecast_category_weekly*.csv  # Category level datasets
 │   └── forecast_customer_weekly*.csv  # Customer level datasets
 │
-├── model_evaluation/              # MODEL OUTPUTS (Production v4)
-│   ├── bigquery_*_predictions_v4.csv  # BigQuery upload files
-│   ├── *_predictions_v4.csv           # Final predictions (SKU/Category/Customer)
-│   ├── *_h1_actuals_v4.csv            # Training period actuals
-│   ├── sku_predictions_*.csv          # Individual model outputs:
-│   │   ├── sku_predictions_XGBoost.csv
-│   │   ├── sku_predictions_Naive_Last.csv
-│   │   ├── sku_predictions_MA_4Week.csv
-│   │   ├── sku_predictions_ExpSmooth_03.csv
-│   │   └── sku_predictions_Linear_Trend.csv
-│   ├── model_comparison.csv           # All models performance comparison
-│   ├── sku_pattern_analysis.csv       # SKU classification (sparse/volatile/stable)
-│   └── customer_data_sufficiency.csv  # Data density per customer
+├── model_evaluation/              # MODEL OUTPUTS
+│   ├── bigquery_sku_predictions_v4.csv
+│   ├── bigquery_category_predictions_v4.csv
+│   ├── bigquery_customer_predictions_v4.csv
+│   ├── model_comparison.csv       # All models performance comparison
+│   └── model_summary_all_versions.csv
 │
 ├── scripts/                       # PYTHON SCRIPTS
 │   ├── STAGE1_RAW_EVAL.py         # Raw data quality assessment
@@ -77,29 +70,16 @@ demand_planning/
 │   ├── shared/
 │   │   ├── config.py              # GCP configuration (project, bucket, dataset)
 │   │   └── experiment_tracker.py  # Vertex AI experiment tracking
-│   ├── prep/                      # Run these first (in order)
-│   │   ├── 00_setup_config.ipynb  # Verify GCP/local connection
-│   │   ├── 01_data_extraction.ipynb   # Extract from Excel files
-│   │   ├── 02_data_prep.ipynb         # Clean data, customer mapping
-│   │   └── 03_feature_engineering.ipynb # Create lag features, H1/H2 split
-│   ├── production/                # Model training & evaluation
-│   │   ├── 04_model_training.ipynb    # Train Naive, MA, ExpSmooth, XGBoost
-│   │   └── 05_model_selection.ipynb   # Evaluate on H2, analyze results
+│   ├── prep/
+│   │   └── 00_setup_config.ipynb  # Verify GCP connection
+│   ├── production/
+│   │   ├── 04_model_training.ipynb    # XGBoost training
+│   │   └── 05_model_selection.ipynb   # Model evaluation on H2
 │   └── experiments/
-│       └── 06_run_experiment.ipynb    # Quick hyperparameter testing
-│
-├── archive/                       # HISTORICAL ITERATIONS (not for production)
-│   ├── old_features/              # Previous feature extraction versions
-│   └── old_model_evaluation/      # Previous model versions (v1-v3)
-│
-├── docs/                          # DOCUMENTATION
-│   ├── history/                   # Decision history & roadmaps
-│   └── archive/                   # Old presentations & demos
+│       └── 06_run_experiment.ipynb    # Hyperparameter testing
 │
 ├── dashboard_v8.html              # Interactive forecast dashboard
 ├── dashboard_data_all_versions.js # Dashboard data (V1-V4 models)
-├── .gitignore                     # Git ignore rules
-├── CLAUDE_GUIDE.md                # Guide for using Claude/Cowork with this project
 │
 └── README.md                      # This file
 ```
@@ -228,80 +208,6 @@ python scripts/GENERATE_DASHBOARD_DATA_ALL_VERSIONS.py
 python -m http.server 8000
 # Open: http://localhost:8000/dashboard_v8.html
 ```
-
----
-
-## Jupyter Notebooks
-
-The notebooks can run in **multiple environments** - choose based on your setup:
-
-| Environment | Best For | Setup |
-|-------------|----------|-------|
-| **Local Jupyter** | Quick testing, no GCP costs | `pip install jupyterlab` then `jupyter lab` |
-| **VS Code** | Development with Git integration | Install Jupyter extension |
-| **Vertex AI Workbench** | Production, GCP integration, collaboration | Create instance in GCP Console |
-| **Colab** | Quick sharing, free GPU | Upload notebooks to Google Drive |
-
-All notebooks use the same code - just update the paths in `notebooks/shared/config.py`:
-- **Local**: `BASE_PATH = "./"`
-- **GCP Workbench**: `BASE_PATH = "/home/jupyter/demand_planning/"`
-- **Colab**: Mount Google Drive and set path accordingly
-
-### Notebook Execution Order
-
-```
-notebooks/
-├── prep/                          # Run ONCE to prepare data
-│   ├── 00_setup_config.ipynb      # 1. Verify GCP connection
-│   ├── 01_data_extraction.ipynb   # 2. Extract from Excel → raw_extraction.csv
-│   ├── 02_data_prep.ipynb         # 3. Clean data, customer mapping
-│   └── 03_feature_engineering.ipynb # 4. Create features, H1/H2 split
-│
-├── production/                    # Run to train & evaluate models
-│   ├── 04_model_training.ipynb    # 5. Train all models (Naive, MA, XGBoost)
-│   └── 05_model_selection.ipynb   # 6. Evaluate on H2, analyze results
-│
-└── experiments/                   # Use for iterating
-    └── 06_run_experiment.ipynb    # Quick hyperparameter testing
-```
-
-### Running in GCP Workbench
-
-1. **Create Workbench Instance**:
-   - Go to Vertex AI → Workbench → Create Instance
-   - Region: `europe-west4` (or any region)
-   - Machine: `n1-standard-4` (4 vCPU, 15GB RAM)
-
-2. **Upload Files**:
-   ```bash
-   # Option A: Upload via JupyterLab UI (drag & drop)
-
-   # Option B: Upload via GCS
-   gsutil -m cp -r notebooks/ gs://demand_planning_aca/notebooks/
-   gsutil -m cp -r features_v2/ gs://demand_planning_aca/features_v2/
-
-   # Then in JupyterLab terminal:
-   gsutil -m cp -r gs://demand_planning_aca/notebooks/ ~/demand_planning/
-   gsutil -m cp -r gs://demand_planning_aca/features_v2/ ~/demand_planning/
-   ```
-
-3. **Install Dependencies** (first cell in any notebook):
-   ```python
-   !pip install xgboost scikit-learn google-cloud-bigquery pandas matplotlib
-   ```
-
-4. **Run Notebooks in Order**: 00 → 01 → 02 → 03 → 04 → 05
-
-### Notebook Details
-
-| Notebook | Purpose | Output |
-|----------|---------|--------|
-| 00_setup_config | Verify GCP/local connection | - |
-| 01_data_extraction | Extract line items from Excel | `raw_extraction.csv` |
-| 02_data_prep | Clean SKUs, map customers, infer prices | `transactions_clean.csv` |
-| 03_feature_engineering | Create weekly aggregations, lag features | `forecast_sku_weekly_H1.csv`, `forecast_sku_weekly_H2.csv` |
-| 04_model_training | Train Naive, MA, ExpSmooth, XGBoost | `model_comparison.csv`, `xgboost_model.json` |
-| 05_model_selection | Evaluate predictions, identify problem areas | `predictions_h2.csv`, `sku_evaluation_metrics.csv` |
 
 ---
 
