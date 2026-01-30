@@ -1,0 +1,39 @@
+[2026-01-22 10:59:28] ============================================================
+[2026-01-22 10:59:28] ACA DEMAND PLANNING - MODEL TRAINING
+[2026-01-22 10:59:28] ============================================================
+[2026-01-22 10:59:28] 
+[1/4] Loading feature data...
+[2026-01-22 10:59:29]   ✓ Loaded weekly features: 33308 rows, 1575 SKUs
+[2026-01-22 10:59:29]   ✓ Week range: 2024-W03 to 2025-W52
+[2026-01-22 10:59:29]   ✓ H1 (training): 14413 rows
+[2026-01-22 10:59:29]   ✓ H2 (validation): 18895 rows
+[2026-01-22 10:59:29] 
+[2/4] Training SKU-level XGBoost models...
+[2026-01-22 10:59:29]   ✓ Eligible SKUs (≥4 H1 weeks): 853
+[2026-01-22 10:59:37]   ✓ Trained models: 652
+[2026-01-22 10:59:37]   ✓ Skipped (insufficient data): 201
+[2026-01-22 10:59:37]   ✓ Saved: sku_predictions_XGBoost_v3.csv (13732 predictions)
+[2026-01-22 10:59:37]   ✓ SKU Overall WMAPE: 73.1%
+[2026-01-22 10:59:37]   ✓ Saved: sku_h1_actuals_v3.csv
+[2026-01-22 10:59:37] 
+[3/4] Training Category-level XGBoost models...
+[2026-01-22 10:59:37]   ! Could not load category mapping, using 'Unknown'
+[2026-01-22 10:59:37]   ✓ Saved: category_predictions_XGBoost_v3.csv (26 predictions)
+[2026-01-22 10:59:37]   ✓ Category Overall WMAPE: 56.7%
+[2026-01-22 10:59:37]   ✓ Saved: category_h1_actuals_v3.csv
+[2026-01-22 10:59:37] 
+[4/4] Training Customer-level XGBoost models...
+[2026-01-22 10:59:37]   ✓ Loaded customer data: 605 customers
+[2026-01-22 10:59:37]   ✓ Eligible customers (≥4 H1 weeks): 564
+[2026-01-22 10:59:44]   ✓ Trained customer models: 505
+[2026-01-22 10:59:44]   ✓ Saved: customer_predictions_XGBoost_v3.csv (9245 predictions)
+[2026-01-22 10:59:44]   ✓ Customer Overall WMAPE: 84.8%
+[2026-01-22 10:59:44]   ✓ Saved: customer_h1_actuals_v3.csv
+[2026-01-22 10:59:44] 
+============================================================
+[2026-01-22 10:59:44] TRAINING COMPLETE
+[2026-01-22 10:59:44] ============================================================
+[2026-01-22 10:59:44] Output files saved to: /sessions/affectionate-pensive-goodall/mnt/demand planning/model_evaluation
+[2026-01-22 10:59:44] Log file: /sessions/affectionate-pensive-goodall/mnt/demand planning/model_training_log.txt
+[2026-01-22 10:59:44] 
+Next step: Run the dashboard data generator

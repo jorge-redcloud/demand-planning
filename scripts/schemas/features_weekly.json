@@ -1,0 +1,21 @@
+[
+  {"name": "sku", "type": "INT64", "mode": "REQUIRED"},
+  {"name": "year_week", "type": "STRING", "mode": "REQUIRED", "description": "ISO week format YYYY-Wnn"},
+  {"name": "weekly_quantity", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "avg_unit_price", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "weekly_revenue", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "order_count", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "unique_customers", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "description", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "data_completeness", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "lag1_quantity", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "lag1_price", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "lag2_quantity", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "lag2_price", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "lag4_quantity", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "lag4_price", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "rolling_avg_4w", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "price_rolling_avg_4w", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "price_change", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "price_change_pct", "type": "FLOAT64", "mode": "NULLABLE"}
+]

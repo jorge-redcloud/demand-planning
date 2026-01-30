@@ -1,0 +1,6 @@
+pattern,recommended_model,mape,reason
+cyclical,V2_XGBoost,42.9,Seasonality features improve cyclical patterns
+bulk_oneoff,V1_XGBoost,48.9,Simple model works better for irregular patterns
+stable,V1_XGBoost,48.9,"Low volume, use baseline"
+high_variance,V1_XGBoost,48.9,"Unpredictable, use baseline"
+insufficient_data,None,,Not enough data for reliable prediction

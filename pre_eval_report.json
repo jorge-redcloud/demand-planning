@@ -1,0 +1,359 @@
+{
+  "generated_at": "2026-01-20T11:53:04.928481",
+  "models": {
+    "rev0": {
+      "fact_transactions": {
+        "name": "fact_transactions",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/fact_transactions.csv",
+        "rows": 8691,
+        "columns": 15,
+        "column_names": [
+          "document_no",
+          "invoice_date",
+          "account_no",
+          "customer_name",
+          "total_amount_incl",
+          "region_name",
+          "year",
+          "month",
+          "week_of_year",
+          "day_of_week",
+          "day_of_month",
+          "is_weekend",
+          "is_month_start",
+          "is_month_end",
+          "week_start"
+        ],
+        "file_hash": "1d7db8b675b0",
+        "file_size_kb": 869.8,
+        "unique_regions": 3,
+        "regions": [
+          "Cape Town",
+          "Polokwane",
+          "George"
+        ]
+      },
+      "features_weekly_regional": {
+        "name": "features_weekly_regional",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/features_weekly_regional.csv",
+        "rows": 141,
+        "columns": 29,
+        "column_names": [
+          "week_start",
+          "region_name",
+          "transaction_count",
+          "weekly_revenue",
+          "avg_transaction",
+          "transaction_std",
+          "min_transaction",
+          "max_transaction",
+          "unique_customers",
+          "first_day",
+          "last_day",
+          "week_of_year",
+          "month",
+          "quarter",
+          "trading_days",
+          "weekly_revenue_lag_1w",
+          "weekly_revenue_lag_2w",
+          "weekly_revenue_lag_3w",
+          "weekly_revenue_lag_4w",
+          "weekly_revenue_lag_8w",
+          "weekly_revenue_ma_4w",
+          "weekly_revenue_ma_8w",
+          "weekly_revenue_std_4w",
+          "weekly_revenue_diff_1w",
+          "weekly_revenue_pct_change_4w",
+          "revenue_share",
+          "transaction_share",
+          "revenue_rank",
+          "wow_growth"
+        ],
+        "file_hash": "1906748c74f6",
+        "file_size_kb": 47.6,
+        "unique_regions": 3,
+        "regions": [
+          "Cape Town",
+          "George",
+          "Polokwane"
+        ],
+        "total_weekly_revenue": 2448437221.62
+      },
+      "features_weekly_total": {
+        "name": "features_weekly_total",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/features_weekly_total.csv",
+        "rows": 51,
+        "columns": 12,
+        "column_names": [
+          "week_start",
+          "transaction_count",
+          "weekly_revenue",
+          "avg_transaction",
+          "unique_customers",
+          "active_regions",
+          "revenue_lag_1w",
+          "revenue_lag_2w",
+          "revenue_lag_3w",
+          "revenue_lag_4w",
+          "revenue_ma_4w",
+          "revenue_diff_1w"
+        ],
+        "file_hash": "572ae349ecde",
+        "file_size_kb": 7.9,
+        "total_weekly_revenue": 2448437221.62
+      },
+      "features_customers": {
+        "name": "features_customers",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/features_customers.csv",
+        "rows": 188,
+        "columns": 14,
+        "column_names": [
+          "account_no",
+          "region_name",
+          "last_purchase_date",
+          "first_purchase_date",
+          "purchase_count",
+          "lifetime_value",
+          "avg_order_value",
+          "order_value_std",
+          "min_order",
+          "max_order",
+          "total_transactions",
+          "days_since_last_purchase",
+          "customer_tenure_days",
+          "purchase_frequency"
+        ],
+        "file_hash": "8e8535a84151",
+        "file_size_kb": 24.8,
+        "unique_regions": 3,
+        "regions": [
+          "Polokwane",
+          "Cape Town",
+          "George"
+        ]
+      },
+      "dim_products": {
+        "name": "dim_products",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/dim_products.csv",
+        "rows": 1350,
+        "columns": 18,
+        "column_names": [
+          "sku",
+          "name",
+          "product_type",
+          "categories",
+          "category_ids",
+          "brand",
+          "manufacturer",
+          "price",
+          "weight",
+          "color",
+          "qty",
+          "is_in_stock",
+          "tax_class_name",
+          "fmcg",
+          "created_at",
+          "updated_at",
+          "visibility",
+          "seller_id"
+        ],
+        "file_hash": "e07a16804f8e",
+        "file_size_kb": 310.1,
+        "unique_skus": 1350
+      },
+      "dim_customers": {
+        "name": "dim_customers",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features/dim_customers.csv",
+        "rows": 1407,
+        "columns": 14,
+        "column_names": [
+          "email",
+          "firstname",
+          "lastname",
+          "phone_number",
+          "group_id",
+          "_customer_group_code",
+          "_tax_class_name",
+          "taxvat",
+          "kyc_verified",
+          "category_commission",
+          "website_id",
+          "store_id",
+          "created_at",
+          "updated_at"
+        ],
+        "file_hash": "72fc314fe2c4",
+        "file_size_kb": 196.5
+      }
+    },
+    "sku_demand_0": {
+      "sku0_fact_lineitem": {
+        "name": "sku0_fact_lineitem",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features_sku/sku0_fact_lineitem.csv",
+        "rows": 119337,
+        "columns": 10,
+        "column_names": [
+          "invoice_id",
+          "order_date",
+          "customer_id",
+          "customer_name",
+          "region_name",
+          "sku",
+          "description",
+          "quantity",
+          "unit_price",
+          "line_total"
+        ],
+        "file_hash": "b74bd0259087",
+        "file_size_kb": 10636.5,
+        "unique_skus": 1158,
+        "unique_invoices": 16358,
+        "unique_customers": 134,
+        "unique_regions": 6,
+        "regions": [
+          "Cape Town",
+          "Hardware",
+          "George",
+          "Gauteng",
+          "Polokwane",
+          "Unknown"
+        ],
+        "total_quantity": 18843432,
+        "total_revenue": 3470354406.73,
+        "date_range": [
+          "2025-01-01",
+          "2025-05-01"
+        ]
+      },
+      "sku0_features_weekly": {
+        "name": "sku0_features_weekly",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features_sku/sku0_features_weekly.csv",
+        "rows": 4869,
+        "columns": 24,
+        "column_names": [
+          "year_week",
+          "sku",
+          "weekly_quantity",
+          "weekly_revenue",
+          "avg_price",
+          "transaction_count",
+          "unique_customers",
+          "primary_region",
+          "week_of_year",
+          "month",
+          "quarter",
+          "quantity_lag_1w",
+          "revenue_lag_1w",
+          "quantity_lag_2w",
+          "revenue_lag_2w",
+          "quantity_lag_4w",
+          "revenue_lag_4w",
+          "quantity_ma_4w",
+          "quantity_std_4w",
+          "quantity_diff_1w",
+          "price_change",
+          "brand",
+          "category",
+          "manufacturer"
+        ],
+        "file_hash": "f6c7059b17e0",
+        "file_size_kb": 727.6,
+        "unique_skus": 1158,
+        "unique_categories": 45,
+        "unique_weeks": 11,
+        "week_range": [
+          "2025-W01",
+          "2025-W18"
+        ],
+        "total_weekly_quantity": 18843432,
+        "total_weekly_revenue": 3470354406.73
+      },
+      "sku0_dim_products": {
+        "name": "sku0_dim_products",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features_sku/sku0_dim_products.csv",
+        "rows": 1555,
+        "columns": 10,
+        "column_names": [
+          "sku",
+          "name",
+          "brand",
+          "manufacturer",
+          "category_path",
+          "price",
+          "fmcg",
+          "category_l1",
+          "category_l2",
+          "category_l3"
+        ],
+        "file_hash": "e6d00c6096ef",
+        "file_size_kb": 240.3,
+        "unique_skus": 1158
+      }
+    },
+    "cat_demand_0": {
+      "cat0_features_weekly": {
+        "name": "cat0_features_weekly",
+        "exists": true,
+        "filepath": "/sessions/affectionate-pensive-goodall/mnt/demand planning/features_category/cat0_features_weekly.csv",
+        "rows": 285,
+        "columns": 14,
+        "column_names": [
+          "year_week",
+          "category",
+          "weekly_quantity",
+          "weekly_revenue",
+          "active_skus",
+          "transaction_count",
+          "unique_customers",
+          "week_of_year",
+          "month",
+          "quarter",
+          "quantity_lag_1w",
+          "quantity_lag_2w",
+          "quantity_lag_4w",
+          "quantity_ma_4w"
+        ],
+        "file_hash": "286e26e0908a",
+        "file_size_kb": 22.4,
+        "unique_categories": 46,
+        "unique_weeks": 11,
+        "week_range": [
+          "2025-W01",
+          "2025-W18"
+        ],
+        "total_weekly_quantity": 18843432,
+        "total_weekly_revenue": 3470354406.73
+      }
+    }
+  },
+  "totals": {
+    "rev0": {
+      "tables": 6,
+      "total_rows": 11828
+    },
+    "sku_demand_0": {
+      "tables": 3,
+      "total_rows": 125761,
+      "total_line_items": 119337,
+      "unique_skus": 1158,
+      "unique_invoices": 16358,
+      "total_quantity": 18843432,
+      "total_revenue": 3470354406.73,
+      "weeks_of_data": 11
+    },
+    "cat_demand_0": {
+      "tables": 1,
+      "total_rows": 285,
+      "unique_categories": 46
+    }
+  }
+}

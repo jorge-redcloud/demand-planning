@@ -1,0 +1,42 @@
+[2026-01-22 11:18:52] ============================================================
+[2026-01-22 11:18:52] V3 MODEL TRAINING - KILLER VERSION
+[2026-01-22 11:18:52] ============================================================
+[2026-01-22 11:18:52] 
+[1/6] Loading data...
+[2026-01-22 11:18:52]   ✓ Loaded 33308 rows, 1575 SKUs
+[2026-01-22 11:18:52] 
+[2/6] Detecting outliers...
+[2026-01-22 11:18:54]   ✓ Found 1840 outlier weeks (5.5%)
+[2026-01-22 11:18:54]   ✓ Applied winsorization to cap extreme values
+[2026-01-22 11:18:54] 
+[3/6] Adding V3 features...
+[2026-01-22 11:18:55]   ✓ Added seasonality features (W47, holidays, cyclical encoding)
+[2026-01-22 11:18:55]   ✓ Added extended lag features (1,2,3,4,8,12 weeks)
+[2026-01-22 11:18:55]   ✓ Added rolling statistics (4w, 8w, 12w windows)
+[2026-01-22 11:18:55]   ✓ Added trend and volatility features
+[2026-01-22 11:18:55]   ✓ H1 training: 14413 rows
+[2026-01-22 11:18:55]   ✓ H2 validation: 18895 rows
+[2026-01-22 11:18:55] 
+[4/6] Training SKU-level V3 models...
+[2026-01-22 11:18:55]   ✓ Eligible SKUs (≥4 H1 weeks): 853
+[2026-01-22 11:19:19]   ✓ Trained: 782
+[2026-01-22 11:19:19]   ✓ Skipped: 71
+[2026-01-22 11:19:19]   ✓ Saved: sku_predictions_XGBoost_v3.csv (14964 predictions)
+[2026-01-22 11:19:19] 
+  ★ SKU V3 WMAPE: 69.5%
+[2026-01-22 11:19:19]   ★ W47 (Black Friday) WMAPE: 82.1%
+[2026-01-22 11:19:19] 
+[5/6] Comparing V3 vs V2...
+[2026-01-22 11:19:19]   V2 WMAPE: 57.2%
+[2026-01-22 11:19:19]   V3 WMAPE: 69.5%
+[2026-01-22 11:19:19]   Improvement: -12.3% points
+[2026-01-22 11:19:19] 
+[6/6] Summary
+[2026-01-22 11:19:19] ============================================================
+[2026-01-22 11:19:19] V3 Model trained with:
+[2026-01-22 11:19:19]   - Outlier detection & winsorization
+[2026-01-22 11:19:19]   - 22 features
+[2026-01-22 11:19:19]   - GradientBoosting algorithm
+[2026-01-22 11:19:19] 
+Final SKU WMAPE: 69.5%
+[2026-01-22 11:19:19] ============================================================

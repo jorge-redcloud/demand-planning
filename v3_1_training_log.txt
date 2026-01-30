@@ -1,0 +1,52 @@
+[2026-01-22 11:22:59] ============================================================
+[2026-01-22 11:22:59] V3.1 MODEL TRAINING - OPTIMIZED VERSION
+[2026-01-22 11:22:59] ============================================================
+[2026-01-22 11:22:59] Improvements from V3:
+[2026-01-22 11:22:59]   - Reduced features: 22 → 12 (prevent overfitting)
+[2026-01-22 11:22:59]   - No winsorization on training data (preserve signal)
+[2026-01-22 11:22:59]   - Pattern-based model selection
+[2026-01-22 11:22:59]   - Better handling of sparse/volatile SKUs
+[2026-01-22 11:22:59] 
+[1/5] Loading data...
+[2026-01-22 11:22:59]   ✓ Loaded 33308 rows, 1575 SKUs
+[2026-01-22 11:22:59] 
+[2/5] Adding V3.1 features (12 core features)...
+[2026-01-22 11:23:00]   ✓ Features: ['lag1', 'lag2', 'lag4', 'rolling_mean_4w', 'rolling_std_4w', 'trend_4w', 'momentum', 'week_sin', 'week_cos', 'is_w47', 'cv_4w', 'is_outlier']
+[2026-01-22 11:23:00]   ✓ H1 training: 14413 rows
+[2026-01-22 11:23:00]   ✓ H2 validation: 18895 rows
+[2026-01-22 11:23:00] 
+[3/5] Classifying SKU patterns...
+[2026-01-22 11:23:00]   ✓ Stable: 694
+[2026-01-22 11:23:00]   ✓ Volatile: 159
+[2026-01-22 11:23:00]   ✓ Sparse: 0
+[2026-01-22 11:23:00] 
+[4/5] Training SKU-level V3.1 models...
+[2026-01-22 11:23:14]   ✓ Trained: 782 (stable: 637, volatile: 145, sparse: 0)
+[2026-01-22 11:23:14]   ✓ Skipped: 71
+[2026-01-22 11:23:14] 
+  WMAPE by pattern:
+[2026-01-22 11:23:14]     stable: 71.3%
+[2026-01-22 11:23:14]     volatile: 96.9%
+[2026-01-22 11:23:14] 
+  ★ W47 (Black Friday) WMAPE: 80.8%
+[2026-01-22 11:23:14] 
+  ✓ Saved: sku_predictions_XGBoost_v3_1.csv (14964 predictions)
+[2026-01-22 11:23:14] 
+[5/5] Comparing V3.1 vs V2 vs V3...
+[2026-01-22 11:23:14]   V2 WMAPE:   57.2%
+[2026-01-22 11:23:14]   V3 WMAPE:   69.5%
+[2026-01-22 11:23:14]   V3.1 WMAPE: 75.0%
+[2026-01-22 11:23:14] 
+  Improvement vs V2: -17.8% points
+[2026-01-22 11:23:14] 
+============================================================
+[2026-01-22 11:23:14] SUMMARY
+[2026-01-22 11:23:14] ============================================================
+[2026-01-22 11:23:14] V3.1 Final WMAPE: 75.0%
+[2026-01-22 11:23:14] Models trained: 782
+[2026-01-22 11:23:14] Features used: 12
+[2026-01-22 11:23:14] Key changes from V3:
+[2026-01-22 11:23:14]   ✓ No winsorization (preserves signal)
+[2026-01-22 11:23:14]   ✓ Fewer features (prevents overfitting)
+[2026-01-22 11:23:14]   ✓ Pattern-based model selection
+[2026-01-22 11:23:14] ============================================================

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedAI Demand Forecast - Dashboard v8 (Model Type Indicator)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.0.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0f1a;
+            --bg-card: #111827;
+            --bg-input: #1f2937;
+            --border: #374151;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #8b5cf6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        .app { display: flex; min-height: 100vh; }
+        .sidebar {
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; }
+        .version-badge {
+            display: inline-block; padding: 4px 8px; background: var(--accent-purple);
+            color: white; font-size: 0.65rem; border-radius: 4px; margin-left: 8px;
+        }
+        .subtitle { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
+        .nav-section { margin-bottom: 20px; }
+        .nav-label {
+            font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+        }
+        .nav-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%;
+            padding: 10px 14px; background: transparent; border: none;
+            border-radius: 8px; color: var(--text-secondary); font-size: 0.9rem;
+            cursor: pointer; transition: all 0.2s; text-align: left; margin-bottom: 4px;
+        }
+        .nav-btn:hover { background: var(--bg-input); color: var(--text-primary); }
+        .nav-btn.active { background: var(--accent-blue); color: white; }
+        .nav-btn .icon { font-size: 1.1rem; }
+
+        /* Version Selector Buttons */
+        .version-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        .version-btn {
+            flex: 1; min-width: 55px; padding: 8px 4px; background: var(--bg-input);
+            border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text-secondary); font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .version-btn:hover { border-color: var(--accent-purple); color: var(--text-primary); }
+        .version-btn.active { background: var(--accent-purple); border-color: var(--accent-purple); color: white; }
+        .version-wmape {
+            display: block; font-size: 0.6rem; font-weight: 400; margin-top: 2px;
+            opacity: 0.8; line-height: 1.2;
+        }
+
+        .filter-section { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .filter-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px; }
+        .filter-checks { display: flex; flex-direction: column; gap: 6px; }
+        .filter-check {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.85rem; color: var(--text-secondary); cursor: pointer;
+        }
+        .filter-check input { cursor: pointer; }
+        .filter-check.high { color: var(--accent-green); }
+        .filter-check.medium { color: var(--accent-orange); }
+        .filter-check.low { color: var(--text-muted); }
+
+        .info-box {
+            margin-top: auto; padding: 12px; background: var(--bg-input);
+            border-radius: 8px; font-size: 0.75rem;
+        }
+        .info-box h4 { color: var(--accent-purple); margin-bottom: 6px; font-size: 0.8rem; }
+        .info-box p { color: var(--text-muted); line-height: 1.4; }
+
+        .main { flex: 1; padding: 28px; overflow-y: auto; }
+        .page-header { margin-bottom: 24px; }
+        .page-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 6px; }
+        .page-desc { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .chart-section {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px;
+        }
+        .chart-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+        }
+        .chart-title { font-size: 1rem; font-weight: 600; }
+        .selector-group { display: flex; align-items: center; gap: 8px; }
+        .selector-label { font-size: 0.85rem; color: var(--text-secondary); }
+        select {
+            padding: 8px 12px; background: var(--bg-input); border: 1px solid var(--border);
+            border-radius: 6px; color: var(--text-primary); font-size: 0.85rem;
+            min-width: 350px; cursor: pointer;
+        }
+        select:focus { outline: none; border-color: var(--accent-purple); }
+
+        .metadata-row {
+            display: flex; gap: 12px; align-items: center; margin-bottom: 12px;
+            padding: 10px 14px; background: var(--bg-input); border-radius: 8px; flex-wrap: wrap;
+        }
+        .metadata-item { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; }
+        .metadata-label { color: var(--text-muted); }
+        .metadata-value { color: var(--text-primary); font-weight: 500; }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 3px;
+            padding: 3px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;
+        }
+        .badge-green { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+        .badge-orange { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+        .badge-red { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+        .badge-gray { background: rgba(107, 114, 128, 0.2); color: var(--text-muted); }
+        .badge-purple { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+
+        .chart-container { height: 380px; position: relative; }
+
+        .chart-legend {
+            display: flex; justify-content: center; gap: 24px; margin-top: 16px;
+            padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-secondary); }
+        .legend-line { width: 28px; height: 3px; border-radius: 2px; }
+        .legend-line.solid { background: var(--accent-blue); }
+        .legend-line.dashed { background: repeating-linear-gradient(90deg, var(--accent-green), var(--accent-green) 5px, transparent 5px, transparent 9px); }
+
+        .no-data-message {
+            text-align: center; padding: 60px 20px; color: var(--text-muted);
+        }
+        .no-data-message h3 { color: var(--accent-orange); margin-bottom: 8px; }
+
+        /* Version comparison mini-table */
+        .version-compare {
+            margin-top: 12px; padding: 10px; background: var(--bg-input);
+            border-radius: 8px; font-size: 0.75rem;
+        }
+        .version-compare table { width: 100%; border-collapse: collapse; }
+        .version-compare th { text-align: left; color: var(--text-muted); padding: 4px 8px; font-weight: 500; }
+        .version-compare td { padding: 4px 8px; color: var(--text-secondary); }
+        .version-compare tr.current { background: rgba(139, 92, 246, 0.15); }
+        .version-compare .best { color: var(--accent-green); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div>
+                <div class="logo">RedAI Forecast <span class="version-badge">v8</span></div>
+                <div class="subtitle">Model Type Indicator</div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-label">Model Version</div>
+                <div class="version-selector" id="versionSelector">
+                    <!-- Populated by JS -->
+                </div>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">View By</div>
+                <button class="nav-btn active" onclick="setView('sku')" id="navSku">
+                    <span class="icon">📦</span> SKU Level
+                </button>
+                <button class="nav-btn" onclick="setView('category')" id="navCategory">
+                    <span class="icon">📁</span> Category Level
+                </button>
+                <button class="nav-btn" onclick="setView('customer')" id="navCustomer">
+                    <span class="icon">👥</span> Customer Level
+                </button>
+            </nav>
+
+            <div class="filter-section">
+                <div class="nav-label">Filter by Confidence</div>
+                <div class="filter-checks">
+                    <label class="filter-check high">
+                        <input type="checkbox" id="filterHigh" checked onchange="applyFilters()">
+                        <span>✓ High (<40% WMAPE)</span>
+                    </label>
+                    <label class="filter-check medium">
+                        <input type="checkbox" id="filterMedium" onchange="applyFilters()">
+                        <span>◐ Medium (<60% WMAPE)</span>
+                    </label>
+                    <label class="filter-check low">
+                        <input type="checkbox" id="filterLow" onchange="applyFilters()">
+                        <span>○ Low (≥60% WMAPE)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="nav-label">Filter by Model Type</div>
+                <div class="filter-checks">
+                    <label class="filter-check" style="color: var(--accent-green);">
+                        <input type="checkbox" id="filterXGBoost" checked onchange="applyFilters()">
+                        <span>✓ XGBoost (trained model)</span>
+                    </label>
+                    <label class="filter-check" style="color: var(--accent-orange);">
+                        <input type="checkbox" id="filterNaive" checked onchange="applyFilters()">
+                        <span>⚠ Naive (fallback model)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="nav-label">Chart Options</div>
+                <div class="filter-checks">
+                    <label class="filter-check">
+                        <input type="checkbox" id="showW47" checked onchange="updateChart()">
+                        <span>Show W47 (Black Friday)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Version Comparison Table (hidden) -->
+            <div class="version-compare" id="versionCompare" style="display: none;">
+                <div class="nav-label" style="margin-bottom: 8px;">WMAPE Comparison</div>
+                <table id="compareTable">
+                    <!-- Populated by JS -->
+                </table>
+            </div>
+
+            <div class="info-box">
+                <h4>Model Versions</h4>
+                <p>
+                    <strong>V1:</strong> Original XGBoost<br>
+                    <strong>V2:</strong> Pattern-based features<br>
+                    <strong>V3:</strong> Outlier handling + W47<br>
+                    <strong>V4:</strong> Per-SKU + price features
+                </p>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="page-header">
+                <h1 class="page-title">Weekly Demand Forecast</h1>
+                <p class="page-desc" id="pageDesc">H2 2025 (W27-W52) = Validation | <span id="currentVersion">V4</span></p>
+            </header>
+
+            <section class="chart-section">
+                <div class="chart-header">
+                    <div class="chart-title" id="chartTitle">SKU Forecast</div>
+                    <div class="selector-group">
+                        <span class="selector-label">Select:</span>
+                        <select id="entitySelect" onchange="updateChart()"></select>
+                    </div>
+                </div>
+
+                <div class="metadata-row" id="metaRow"></div>
+
+                <div id="chartArea">
+                    <div class="chart-container">
+                        <canvas id="forecastChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-line solid"></span>
+                        <span>Actual Demand</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line dashed"></span>
+                        <span>XGBoost Prediction</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard_data_all_versions.js"></script>
+    <script>
+        let currentView = 'sku';
+        let currentVersion = 'V4';
+        let chart = null;
+        let showH1 = false; // H1 hidden by default
+
+        // Precomputed median WMAPE + IQR for each version and level
+        // NOTE: Category stats exclude low-volume categories (Beverages, Brand Mfg, Vehicles)
+        //       and W47 (Black Friday) which causes extreme outliers
+        const VERSION_STATS = {
+            V1: {
+                sku: { median: 61.2, p25: 45.1, p75: 81.3 },
+                category: { median: 45.5, p25: 38, p75: 48 },  // High-volume only, excl W47
+                customer: { median: 93.7, p25: 88.2, p75: 99 }  // Capped at 99
+            },
+            V2: {
+                sku: { median: 70.0, p25: 52.5, p75: 99 },  // Capped at 99
+                category: { median: 36.3, p25: 32, p75: 41 },  // High-volume only, excl W47
+                customer: { median: 78.9, p25: 65.3, p75: 97.3 }
+            },
+            V3: {
+                sku: { median: 69.8, p25: 54.0, p75: 89.1 },
+                category: { median: 50.5, p25: 40, p75: 59 },  // High-volume only, excl W47
+                customer: { median: 85.6, p25: 74.5, p75: 99 }  // Capped at 99
+            },
+            V4: {
+                sku: { median: 63.3, p25: 43.1, p75: 99 },  // Capped at 99
+                category: { median: 41.3, p25: 35, p75: 46 },  // High-volume only, excl W47
+                customer: { median: 94.2, p25: 78.2, p75: 99 }  // Capped at 99
+            }
+        };
+
+        // Max displayable WMAPE (anything above this is "outlier")
+        const MAX_DISPLAY_WMAPE = 99;
+
+        // Get current version data
+        function getVersionData() {
+            return DASHBOARD_DATA.versions[currentVersion] || {};
+        }
+
+        function setVersion(version) {
+            currentVersion = version;
+            document.querySelectorAll('.version-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.version === version);
+            });
+            document.getElementById('currentVersion').textContent = version;
+            updateCompareTable();
+            applyFilters();
+        }
+
+        function setView(view) {
+            currentView = view;
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('nav' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
+
+            const titles = { sku: 'SKU Forecast', category: 'Category Forecast', customer: 'Customer Forecast' };
+            document.getElementById('chartTitle').textContent = titles[view];
+
+            updateVersionButtons();
+            updateCompareTable();
+            applyFilters();
+        }
+
+        function initVersionButtons() {
+            const container = document.getElementById('versionSelector');
+            container.innerHTML = '';
+
+            const versions = Object.keys(DASHBOARD_DATA.versions);
+            versions.forEach(ver => {
+                const btn = document.createElement('button');
+                btn.className = 'version-btn' + (ver === currentVersion ? ' active' : '');
+                btn.dataset.version = ver;
+                btn.onclick = () => setVersion(ver);
+
+                // Get median + IQR for current view
+                const stats = VERSION_STATS[ver]?.sku || {};
+                const statsText = stats.median !== null
+                    ? `μ̃${stats.median}% (${stats.p25}-${stats.p75})`
+                    : 'N/A';
+
+                btn.innerHTML = `${ver}<span class="version-wmape">${statsText}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        function updateVersionButtons() {
+            const viewKey = currentView === 'sku' ? 'sku' : (currentView === 'category' ? 'category' : 'customer');
+
+            document.querySelectorAll('.version-btn').forEach(btn => {
+                const ver = btn.dataset.version;
+                const stats = VERSION_STATS[ver]?.[viewKey] || {};
+                const statsText = stats.median !== null
+                    ? `μ̃${stats.median}% (${stats.p25}-${stats.p75})`
+                    : 'N/A';
+                btn.querySelector('.version-wmape').textContent = statsText;
+            });
+        }
+
+        function updatePageDesc() {
+            const desc = document.getElementById('pageDesc');
+            if (showH1) {
+                desc.innerHTML = `H1 2025 (W01-W26) = Training | H2 2025 (W27-W52) = Validation | <span id="currentVersion">${currentVersion}</span>`;
+            } else {
+                desc.innerHTML = `H2 2025 (W27-W52) = Validation | <span id="currentVersion">${currentVersion}</span>`;
+            }
+        }
+
+        function updateCompareTable() {
+            const table = document.getElementById('compareTable');
+            const viewKey = currentView === 'sku' ? 'sku' : (currentView === 'category' ? 'category' : 'customer');
+            const viewLabel = currentView === 'sku' ? 'SKU' : (currentView === 'category' ? 'Category' : 'Customer');
+
+            // Find best median WMAPE
+            let bestMedian = Infinity;
+            let bestVersion = '';
+            Object.entries(VERSION_STATS).forEach(([ver, data]) => {
+                const median = data[viewKey]?.median;
+                if (median !== null && median < bestMedian) {
+                    bestMedian = median;
+                    bestVersion = ver;
+                }
+            });
+
+            let html = `<tr><th>Ver</th><th>Median</th><th>IQR</th></tr>`;
+
+            Object.entries(DASHBOARD_DATA.versions).forEach(([ver, data]) => {
+                const stats = VERSION_STATS[ver]?.[viewKey] || {};
+                const median = stats.median !== null ? stats.median + '%' : 'N/A';
+                const iqr = (stats.p25 !== null && stats.p75 !== null)
+                    ? `${stats.p25}-${stats.p75}%`
+                    : 'N/A';
+                const isCurrent = ver === currentVersion;
+                const isBest = ver === bestVersion;
+
+                html += `<tr class="${isCurrent ? 'current' : ''}">
+                    <td><strong>${ver}</strong></td>
+                    <td class="${isBest ? 'best' : ''}">${median}</td>
+                    <td>${iqr}</td>
+                </tr>`;
+            });
+
+            table.innerHTML = html;
+        }
+
+        function applyFilters() {
+            const showHigh = document.getElementById('filterHigh').checked;
+            const showMedium = document.getElementById('filterMedium').checked;
+            const showLow = document.getElementById('filterLow').checked;
+            const showXGBoost = document.getElementById('filterXGBoost').checked;
+            const showNaive = document.getElementById('filterNaive').checked;
+
+            populateSelect(showHigh, showMedium, showLow, showXGBoost, showNaive);
+            updateChart();
+        }
+
+        function populateSelect(showHigh = true, showMedium = false, showLow = false, showXGBoost = true, showNaive = true) {
+            const select = document.getElementById('entitySelect');
+            select.innerHTML = '';
+
+            const versionData = getVersionData();
+            const viewKey = currentView === 'sku' ? 'sku' : (currentView === 'category' ? 'category' : 'customer');
+            const levelData = versionData[viewKey];
+
+            if (!levelData) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = '-- No data for this version --';
+                select.appendChild(option);
+                return;
+            }
+
+            let lists = {
+                high: levelData.listHigh || [],
+                medium: levelData.listMedium || [],
+                low: levelData.listLow || []
+            };
+            const meta = levelData.meta || {};
+            const names = levelData.names || {};
+
+            let combined = [];
+            if (showHigh) combined = combined.concat(lists.high.map(id => ({id, conf: 'high'})));
+            if (showMedium) combined = combined.concat(lists.medium.map(id => ({id, conf: 'medium'})));
+            if (showLow) combined = combined.concat(lists.low.map(id => ({id, conf: 'low'})));
+
+            // Filter by model type
+            combined = combined.filter(item => {
+                const m = meta[item.id] || {};
+                const modelType = m.model_type || 'sku';
+                const isNaive = modelType === 'global' || (m.h1_weeks || 0) < 4;
+                if (isNaive && !showNaive) return false;
+                if (!isNaive && !showXGBoost) return false;
+                return true;
+            });
+
+            if (combined.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = '-- No items match filters --';
+                select.appendChild(option);
+                return;
+            }
+
+            combined.forEach((item, idx) => {
+                const id = item.id;
+                const m = meta[id] || {};
+                const name = currentView === 'category' ? id : (names[id] || m.name || id);
+                const wmape = m.wmape ? `${m.wmape.toFixed(1)}%` : 'N/A';
+                const confIcon = item.conf === 'high' ? '✓' : (item.conf === 'medium' ? '◐' : '○');
+
+                // Model type indicator - show [Naive] for global/naive models
+                const modelType = m.model_type || 'sku';
+                const isNaive = modelType === 'global' || (m.h1_weeks || 0) < 4;
+                const modelTag = isNaive ? ' [Naive]' : '';
+
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = `#${idx + 1} ${confIcon} ${name} (WMAPE: ${wmape})${modelTag}`;
+                if (isNaive) {
+                    option.style.color = '#f59e0b';  // Orange for naive models
+                }
+                select.appendChild(option);
+            });
+        }
+
+        function updateChart() {
+            const select = document.getElementById('entitySelect');
+            const id = select.value;
+
+            if (!id) {
+                document.getElementById('chartArea').innerHTML = `
+                    <div class="no-data-message">
+                        <h3>No Items Selected</h3>
+                        <p>Enable confidence filters in the sidebar or select a different version.</p>
+                    </div>`;
+                return;
+            }
+
+            // Restore chart canvas if needed
+            if (!document.getElementById('forecastChart')) {
+                document.getElementById('chartArea').innerHTML = '<div class="chart-container"><canvas id="forecastChart"></canvas></div>';
+            }
+
+            const versionData = getVersionData();
+            const viewKey = currentView === 'sku' ? 'sku' : (currentView === 'category' ? 'category' : 'customer');
+            const levelData = versionData[viewKey];
+
+            if (!levelData) return;
+
+            const h1Data = levelData.h1[id] || {};
+            const h2Data = levelData.h2[id] || {};
+            const metadata = levelData.meta[id] || {};
+
+            // Update metadata row
+            const metaRow = document.getElementById('metaRow');
+            const wmape = metadata.wmape;
+            let confLevel = 'low';
+            if (wmape < 40 && (metadata.h1_weeks || 0) >= 15) confLevel = 'high';
+            else if (wmape < 60 && (metadata.h1_weeks || 0) >= 10) confLevel = 'medium';
+
+            const confBadge = getConfidenceBadge(confLevel);
+
+            // Only show H1 weeks if it has a value > 0
+            const h1WeeksHtml = metadata.h1_weeks && metadata.h1_weeks > 0
+                ? `<div class="metadata-item">
+                    <span class="metadata-label">H1 Weeks:</span>
+                    <span class="metadata-value">${metadata.h1_weeks}</span>
+                   </div>`
+                : '';
+
+            // Model type indicator (global = naive/fallback model, sku = dedicated model)
+            const modelType = metadata.model_type || 'sku';
+            const isNaiveModel = modelType === 'global' || (metadata.h1_weeks || 0) < 4;
+            const modelBadgeHtml = isNaiveModel
+                ? `<div class="metadata-item">
+                    <span class="metadata-label">Model:</span>
+                    <span class="badge badge-orange" title="Using global/naive model due to insufficient training data">⚠️ Naive</span>
+                   </div>`
+                : `<div class="metadata-item">
+                    <span class="metadata-label">Model:</span>
+                    <span class="badge badge-green" title="Dedicated XGBoost model trained for this entity">✓ XGBoost</span>
+                   </div>`;
+
+            metaRow.innerHTML = `
+                <div class="metadata-item">
+                    <span class="metadata-label">Version:</span>
+                    <span class="badge badge-purple">${currentVersion}</span>
+                </div>
+                ${modelBadgeHtml}
+                <div class="metadata-item">
+                    <span class="metadata-label">Confidence:</span>
+                    <span class="badge ${confBadge.class}">${confBadge.text}</span>
+                </div>
+                ${h1WeeksHtml}
+                <div class="metadata-item">
+                    <span class="metadata-label">WMAPE:</span>
+                    <span class="metadata-value">${wmape ? wmape.toFixed(1) + '%' : 'N/A'}</span>
+                </div>
+            `;
+
+            // Build chart data
+            updatePageDesc();
+            const allWeeks = showH1 ? DASHBOARD_DATA.allWeeks : DASHBOARD_DATA.h2Weeks;
+            const h1Weeks = DASHBOARD_DATA.h1Weeks;
+            const actualData = [];
+            const predictedData = [];
+
+            allWeeks.forEach(week => {
+                if (h1Weeks.includes(week)) {
+                    // H1 weeks - only show if showH1 is enabled
+                    actualData.push(h1Data[week] || 0);
+                    predictedData.push(null);
+                } else {
+                    // H2 weeks - always show
+                    const actual = h2Data.actual ? (h2Data.actual[week] || 0) : 0;
+                    actualData.push(actual);
+                    predictedData.push(h2Data.predicted ? (h2Data.predicted[week] || 0) : 0);
+                }
+            });
+
+            // Render chart
+            const ctx = document.getElementById('forecastChart').getContext('2d');
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: allWeeks.map(w => w.replace('2025-', '')),
+                    datasets: [
+                        {
+                            label: 'Actual',
+                            data: actualData,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 5
+                        },
+                        {
+                            label: 'Predicted',
+                            data: predictedData,
+                            borderColor: '#10b981',
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { display: false },
+                        annotation: {
+                            annotations: getAnnotations()
+                        },
+                        tooltip: {
+                            backgroundColor: '#1f2937',
+                            callbacks: {
+                                label: function(ctx) {
+                                    const val = ctx.raw;
+                                    if (val === null) return ctx.dataset.label + ': N/A';
+                                    return ctx.dataset.label + ': ' + val.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' },
+                            ticks: { color: '#9ca3af', maxRotation: 45 }
+                        },
+                        y: {
+                            grid: { color: 'rgba(55, 65, 81, 0.3)' },
+                            ticks: {
+                                color: '#9ca3af',
+                                callback: val => val >= 1000 ? (val/1000).toFixed(0) + 'K' : val
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getConfidenceBadge(confidence) {
+            switch(confidence) {
+                case 'high': return { class: 'badge-green', text: '✓ High' };
+                case 'medium': return { class: 'badge-yellow', text: '◐ Medium' };
+                case 'low': return { class: 'badge-orange', text: '○ Low' };
+                default: return { class: 'badge-gray', text: '✗ None' };
+            }
+        }
+
+        function getAnnotations() {
+            const showW47 = document.getElementById('showW47').checked;
+
+            const annotations = {};
+
+            // Only show H2 start line if H1 is visible
+            if (showH1) {
+                annotations.h2Line = {
+                    type: 'line',
+                    xMin: 'W27',
+                    xMax: 'W27',
+                    borderColor: 'rgba(239, 68, 68, 0.5)',
+                    borderWidth: 2,
+                    borderDash: [4, 4],
+                    label: {
+                        display: true,
+                        content: 'H2 Start',
+                        position: 'start',
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        color: 'white',
+                        font: { size: 10 }
+                    }
+                };
+            }
+
+            if (showW47) {
+                annotations.w47Line = {
+                    type: 'line',
+                    xMin: 'W47',
+                    xMax: 'W47',
+                    borderColor: 'rgba(245, 158, 11, 0.7)',
+                    borderWidth: 2,
+                    borderDash: [4, 4],
+                    label: {
+                        display: true,
+                        content: '🛒 Black Friday',
+                        position: 'start',
+                        backgroundColor: 'rgba(245, 158, 11, 0.9)',
+                        color: 'white',
+                        font: { size: 10 }
+                    }
+                };
+            }
+
+            return annotations;
+        }
+
+        // Keyboard shortcut: Cmd+H to toggle H1
+        document.addEventListener('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'h') {
+                e.preventDefault();
+                showH1 = !showH1;
+                updateChart();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initVersionButtons();
+            updateVersionButtons();
+            updateCompareTable();
+            applyFilters();
+        });
+    </script>
+</body>
+</html>

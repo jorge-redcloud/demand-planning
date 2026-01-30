@@ -1,0 +1,80 @@
+[2026-01-22 12:50:34] ======================================================================
+[2026-01-22 12:50:34] V4 MODEL TRAINING - Comprehensive Multi-Level Forecasting
+[2026-01-22 12:50:34] ======================================================================
+[2026-01-22 12:50:34] 
+[1/7] Loading data...
+[2026-01-22 12:50:34]   ✓ Loaded 33308 rows, 1575 SKUs
+[2026-01-22 12:50:34]   ✓ Categories: 9
+[2026-01-22 12:50:34] 
+[2/7] Adding V4 features...
+[2026-01-22 12:50:35]   ✓ Features: 16
+[2026-01-22 12:50:35]   ✓ H1 training: 14413 rows
+[2026-01-22 12:50:35]   ✓ H2 test: 18895 rows
+[2026-01-22 12:50:35] 
+[3/7] Training per-SKU models...
+[2026-01-22 12:50:35]   Strategy: Train on non-Unknown SKUs, but predict for ALL
+[2026-01-22 12:50:35]   ✓ Training SKUs (excl. Unknown): 944
+[2026-01-22 12:50:45]   ✓ Trained 669 individual SKU models
+[2026-01-22 12:50:49]   ✓ Trained global fallback model
+[2026-01-22 12:50:51] 
+  ★ SKU Overall WMAPE: 62.5%
+[2026-01-22 12:50:51]     Unknown: 54.8%
+[2026-01-22 12:50:51]     Hardware: 55.3%
+[2026-01-22 12:50:51]     Toiletries: 65.8%
+[2026-01-22 12:50:51]     Vehicles & Parts: 413.8%
+[2026-01-22 12:50:51]     Home & Garden: 70.9%
+[2026-01-22 12:50:51]     Baby and Toddler: 62.1%
+[2026-01-22 12:50:51]     Food: 68.1%
+[2026-01-22 12:50:51]     Brand Manufacturers: 100.1%
+[2026-01-22 12:50:51]     Beverages: 73.3%
+[2026-01-22 12:50:51] 
+  Confidence: High=26, Medium=184, Low=1156
+[2026-01-22 12:50:51]   ✓ Saved: sku_predictions_v4.csv (18895 predictions)
+[2026-01-22 12:50:51] 
+[4/7] Training per-Category models...
+[2026-01-22 12:50:51] 
+  ★ Category Overall WMAPE: 54.3%
+[2026-01-22 12:50:51]     Baby and Toddler: 39.6%
+[2026-01-22 12:50:51]     Beverages: 72.3%
+[2026-01-22 12:50:51]     Brand Manufacturers: 87.9%
+[2026-01-22 12:50:51]     Food: 54.1%
+[2026-01-22 12:50:51]     Hardware: 49.0%
+[2026-01-22 12:50:51]     Home & Garden: 38.6%
+[2026-01-22 12:50:51]     Toiletries: 41.9%
+[2026-01-22 12:50:51]     Unknown: 81.3%
+[2026-01-22 12:50:51]     Vehicles & Parts: 50.4%
+[2026-01-22 12:50:51]   ✓ Saved: category_predictions_v4.csv (232 predictions)
+[2026-01-22 12:50:51] 
+[5/7] Training per-Customer models...
+[2026-01-22 12:50:56]   ✓ Trained 357 individual customer models
+[2026-01-22 12:50:57] 
+  ★ Customer Overall WMAPE: 89.3%
+[2026-01-22 12:50:57]   Confidence: High=1, Medium=18, Low=563
+[2026-01-22 12:50:57]   ✓ Saved: customer_predictions_v4.csv (9826 predictions)
+[2026-01-22 12:50:57] 
+[6/7] Saving H1 actuals for dashboard...
+[2026-01-22 12:50:57]   ✓ Saved H1 actuals
+[2026-01-22 12:50:57] 
+[7/7] Summary
+[2026-01-22 12:50:57] 
+======================================================================
+[2026-01-22 12:50:57] V4 MODEL TRAINING COMPLETE
+[2026-01-22 12:50:57] ======================================================================
+[2026-01-22 12:50:57] 
+  SKU Level:
+[2026-01-22 12:50:57]     WMAPE: 62.5%
+[2026-01-22 12:50:57]     SKUs: 1366
+[2026-01-22 12:50:57]     Predictions: 18895
+[2026-01-22 12:50:57] 
+  Category Level:
+[2026-01-22 12:50:57]     WMAPE: 54.3%
+[2026-01-22 12:50:57]     Categories: 9
+[2026-01-22 12:50:57]     Predictions: 232
+[2026-01-22 12:50:57] 
+  Customer Level:
+[2026-01-22 12:50:57]     WMAPE: 89.3%
+[2026-01-22 12:50:57]     Customers: 582
+[2026-01-22 12:50:57]     Predictions: 9826
+[2026-01-22 12:50:57] 
+  Files saved to: /sessions/affectionate-pensive-goodall/mnt/demand planning/model_evaluation
+[2026-01-22 12:50:57] ======================================================================

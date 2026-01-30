@@ -1,0 +1,63 @@
+[2026-01-22 12:40:57] ============================================================
+[2026-01-22 12:40:57] V3 HYBRID MODEL - Per-Category + SKU Features
+[2026-01-22 12:40:57] ============================================================
+[2026-01-22 12:40:57] 
+[1/5] Loading data...
+[2026-01-22 12:40:57]   ✓ Loaded 33308 rows, 1575 SKUs
+[2026-01-22 12:40:57]   ✓ Categories: 9
+[2026-01-22 12:40:57]   ✓ H1 training: 14413 rows
+[2026-01-22 12:40:57]   ✓ H2 test: 18895 rows
+[2026-01-22 12:40:57] 
+[2/5] Training GLOBAL fallback model...
+[2026-01-22 12:40:59]   ✓ Global model trained
+[2026-01-22 12:40:59] 
+[3/5] Training per-CATEGORY models...
+[2026-01-22 12:40:59]   ✓ Unknown: Trained on 740 rows
+[2026-01-22 12:40:59]   ✓ Hardware: Trained on 849 rows
+[2026-01-22 12:41:00]   ✓ Toiletries: Trained on 2965 rows
+[2026-01-22 12:41:00]   ⚠ Vehicles & Parts: Only 11 rows - using GLOBAL model
+[2026-01-22 12:41:00]   ✓ Home & Garden: Trained on 3558 rows
+[2026-01-22 12:41:00]   ✓ Baby and Toddler: Trained on 714 rows
+[2026-01-22 12:41:00]   ✓ Food: Trained on 1569 rows
+[2026-01-22 12:41:00]   ⚠ Brand Manufacturers: Only 17 rows - using GLOBAL model
+[2026-01-22 12:41:00]   ⚠ Beverages: Only 23 rows - using GLOBAL model
+[2026-01-22 12:41:00] 
+[4/5] Predicting for H2...
+[2026-01-22 12:41:01]   ✓ Generated 16976 predictions
+[2026-01-22 12:41:01] 
+[5/5] Calculating metrics...
+[2026-01-22 12:41:01] 
+  ★ HYBRID Overall WMAPE: 68.2%
+[2026-01-22 12:41:01]   ★ Category model WMAPE: 68.3% (16830 predictions)
+[2026-01-22 12:41:01]   ★ Global model WMAPE: 63.0% (146 predictions)
+[2026-01-22 12:41:01] 
+  Per-category WMAPE:
+[2026-01-22 12:41:01]     Unknown: 95.5% (category)
+[2026-01-22 12:41:01]     Hardware: 53.9% (category)
+[2026-01-22 12:41:01]     Toiletries: 69.5% (category)
+[2026-01-22 12:41:01]     Vehicles & Parts: 53.7% (global)
+[2026-01-22 12:41:01]     Home & Garden: 63.9% (category)
+[2026-01-22 12:41:01]     Baby and Toddler: 58.2% (category)
+[2026-01-22 12:41:01]     Food: 59.9% (category)
+[2026-01-22 12:41:01]     Brand Manufacturers: 54.1% (global)
+[2026-01-22 12:41:01]     Beverages: 63.4% (global)
+[2026-01-22 12:41:01] 
+  ✓ Saved: sku_predictions_XGBoost_hybrid.csv
+[2026-01-22 12:41:01] 
+----------------------------------------
+[2026-01-22 12:41:01] COMPARISON
+[2026-01-22 12:41:01] ----------------------------------------
+[2026-01-22 12:41:01]   Global-only model:  62.6% WMAPE
+[2026-01-22 12:41:01]   Per-SKU models:     73.1% WMAPE
+[2026-01-22 12:41:01]   HYBRID model:       68.2% WMAPE
+[2026-01-22 12:41:01] 
+  ❌ Hybrid is 5.6% worse
+[2026-01-22 12:41:01] 
+============================================================
+[2026-01-22 12:41:01] SUMMARY
+[2026-01-22 12:41:01] ============================================================
+[2026-01-22 12:41:01] HYBRID approach trains:
+[2026-01-22 12:41:01]   1. One model per CATEGORY (enough training data)
+[2026-01-22 12:41:01]   2. Uses SKU-level features (lags, rolling avg)
+[2026-01-22 12:41:01]   3. Falls back to global for sparse categories
+[2026-01-22 12:41:01] ============================================================

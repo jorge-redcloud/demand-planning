@@ -1,0 +1,40 @@
+{
+  "stage": "2.5",
+  "name": "Data Enrichment",
+  "generated_at": "2026-01-20T12:08:28.763775",
+  "before": {
+    "line_items": 119337,
+    "total_revenue": 3470354406.73,
+    "zero_price_count": 86583,
+    "zero_revenue_count": 1,
+    "unknown_region_count": 10298
+  },
+  "enrichment": {
+    "prices": {
+      "original_zero_price": 86583,
+      "truly_missing_revenue": 1,
+      "had_total_but_no_price": 86582,
+      "inferred_from_sku": 1,
+      "inferred_from_master": 0,
+      "remaining_zero_revenue": 0,
+      "enrichment_rate": 100.0
+    },
+    "regions": {
+      "original_unknown": 10298,
+      "fixed": 0,
+      "remaining_unknown": 10298
+    },
+    "customers": {
+      "original_empty": 114763,
+      "remaining_empty": 114763
+    }
+  },
+  "after": {
+    "line_items": 119337,
+    "total_revenue": 3470387406.73,
+    "revenue_increase": 33000.0,
+    "revenue_increase_pct": 0.0,
+    "zero_revenue_count": 0,
+    "dq_score_avg": 81.4
+  }
+}

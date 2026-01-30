@@ -1,0 +1,7 @@
+[
+  {"name": "master_customer_id", "type": "INT64", "mode": "REQUIRED"},
+  {"name": "customer_name", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "original_ids", "type": "STRING", "mode": "NULLABLE", "description": "Comma-separated list of original customer IDs"},
+  {"name": "num_ids", "type": "INT64", "mode": "NULLABLE"},
+  {"name": "total_volume", "type": "FLOAT64", "mode": "NULLABLE"}
+]

@@ -1,0 +1,9 @@
+[
+  {"name": "entity_id", "type": "STRING", "mode": "REQUIRED", "description": "SKU, category name, or master_customer_id"},
+  {"name": "entity_name", "type": "STRING", "mode": "NULLABLE", "description": "Description or name"},
+  {"name": "year_week", "type": "STRING", "mode": "REQUIRED", "description": "ISO week format YYYY-Wnn"},
+  {"name": "actual", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "predicted", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "abs_error", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "pct_error", "type": "FLOAT64", "mode": "NULLABLE", "description": "MAPE percentage"}
+]

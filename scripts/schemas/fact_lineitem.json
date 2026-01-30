@@ -1,0 +1,18 @@
+[
+  {"name": "invoice_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "order_date", "type": "TIMESTAMP", "mode": "REQUIRED"},
+  {"name": "customer_id", "type": "STRING", "mode": "REQUIRED", "description": "Can be numeric or alphanumeric (HB_*)"},
+  {"name": "customer_name", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "region_name", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "sku", "type": "INT64", "mode": "REQUIRED"},
+  {"name": "description", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "quantity", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "unit_price", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "line_total", "type": "FLOAT64", "mode": "NULLABLE"},
+  {"name": "year_week", "type": "STRING", "mode": "REQUIRED", "description": "ISO week format YYYY-Wnn"},
+  {"name": "data_completeness", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "customer_segment", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "buyer_type", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "category_l1", "type": "STRING", "mode": "NULLABLE"},
+  {"name": "category_l2", "type": "STRING", "mode": "NULLABLE"}
+]

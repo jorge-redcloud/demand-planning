@@ -1,0 +1,5 @@
+[
+  {"name": "original_customer_id", "type": "STRING", "mode": "REQUIRED", "description": "Original ID - can be numeric (592) or alphanumeric (HB_CUT001)"},
+  {"name": "master_customer_id", "type": "INT64", "mode": "REQUIRED", "description": "Normalized ID (1-770)"},
+  {"name": "customer_name", "type": "STRING", "mode": "NULLABLE"}
+]

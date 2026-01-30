@@ -1,0 +1,92 @@
+# =============================================================================
+# ACA Demand Planning - .gitignore
+# =============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# =============================================================================
+# Project-specific ignores
+# =============================================================================
+
+# Raw data (too large for git, should be uploaded separately)
+2025/
+raw_data/
+
+# Large processed data files (regenerate from pipeline)
+features_v2/transactions_clean.csv
+features_v2/v2_fact_lineitem.csv
+features_v2/v2_features_sku_customer.csv
+
+# Model artifacts (regenerate from training)
+model_evaluation/*.json
+model_evaluation/*.joblib
+model_evaluation/*.pkl
+
+# Archive folder (historical iterations)
+archive/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# GCP credentials (NEVER commit these)
+service-account*.json
+credentials*.json
+*-key.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# =============================================================================
+# Files to KEEP in git (override ignores if needed)
+# =============================================================================
+# !important_file.csv

@@ -1,0 +1,211 @@
+{
+  "stage": 2,
+  "name": "Extraction Pipeline Output",
+  "generated_at": "2026-01-20T12:00:17.723760",
+  "files": {
+    "sku0_fact_lineitem": {
+      "rows": 119337,
+      "columns": 10
+    },
+    "sku0_features_weekly": {
+      "rows": 4869,
+      "unique_skus": 1158,
+      "unique_weeks": 11,
+      "week_range": [
+        "2025-W01",
+        "2025-W18"
+      ]
+    },
+    "cat0_features_weekly": {
+      "rows": 285,
+      "unique_categories": 46,
+      "categories": [
+        "Baby Formula",
+        "Baby Wipes",
+        "Bar Soap",
+        "Bath Additives",
+        "Biscuits",
+        "Bleach",
+        "Body Oil",
+        "Candies",
+        "Candles",
+        "Candles & Home Fragrances",
+        "Chewing gums",
+        "Coffee",
+        "Coffee Whitener",
+        "Cooking Oils",
+        "Deodorant",
+        "Deodorants & Anti-Perspirants",
+        "Fabric Softeners & Dryer Sheets",
+        "Facial Cleansers",
+        "Feminine Pads & Protectors",
+        "Flour",
+        "Food",
+        "Grain & Cereals",
+        "Hair Oil",
+        "Hair Permanents & Straighteners",
+        "Haircare",
+        "Hardware",
+        "Household Supplies",
+        "Ice Pops",
+        "Laundry Detergent",
+        "Lollipops",
+        "Lotions & Moisturisers",
+        "Medicines & Drugs",
+        "Milk",
+        "Nappies",
+        "Pasta & Noodles",
+        "Personal Care",
+        "Petroleum Jelly",
+        "Shaving & Grooming",
+        "Sports & Energy Drinks",
+        "Sugar & Sweeteners",
+        "Sweets & Chocolate",
+        "Tinned Seafood",
+        "Toilet Paper",
+        "Toothpaste",
+        "Unknown",
+        "Vehicle Parts & Accessories"
+      ]
+    }
+  },
+  "totals": {
+    "total_line_items": 119337,
+    "total_invoices": 16358,
+    "total_quantity": 18843432,
+    "total_revenue": 3470354406.73,
+    "unique_skus": 1158,
+    "unique_customers": 134,
+    "unique_regions": 6,
+    "regions": [
+      "Cape Town",
+      "Hardware",
+      "George",
+      "Gauteng",
+      "Polokwane",
+      "Unknown"
+    ],
+    "date_range": [
+      "2025-01-01",
+      "2025-05-01"
+    ]
+  },
+  "by_region": {
+    "Cape Town": {
+      "line_items": 3665,
+      "invoices": 162,
+      "quantity": 348739,
+      "revenue": 95848611.76,
+      "skus": 358
+    },
+    "Hardware": {
+      "line_items": 15695,
+      "invoices": 5438,
+      "quantity": 2917892,
+      "revenue": 508412730.25,
+      "skus": 296
+    },
+    "George": {
+      "line_items": 10395,
+      "invoices": 637,
+      "quantity": 1128424,
+      "revenue": 273229717.0,
+      "skus": 346
+    },
+    "Gauteng": {
+      "line_items": 67942,
+      "invoices": 9203,
+      "quantity": 12096797,
+      "revenue": 2035036548.2,
+      "skus": 945
+    },
+    "Polokwane": {
+      "line_items": 11342,
+      "invoices": 794,
+      "quantity": 1412570,
+      "revenue": 333487480.74,
+      "skus": 360
+    },
+    "Unknown": {
+      "line_items": 10298,
+      "invoices": 809,
+      "quantity": 939010,
+      "revenue": 224339318.77,
+      "skus": 343
+    }
+  },
+  "data_quality": {
+    "null_skus": 0,
+    "null_quantities": 0,
+    "zero_quantities": 0,
+    "negative_quantities": 0,
+    "null_prices": 0,
+    "zero_prices": 86583,
+    "unknown_region_count": 10298,
+    "empty_customer_ids": 114763
+  },
+  "comparison": {
+    "line_items": {
+      "raw": 119337,
+      "extracted": 119337,
+      "diff": 0,
+      "pct": 100.0
+    },
+    "invoices": {
+      "raw": 17474,
+      "extracted": 16358,
+      "diff": -1116,
+      "pct": 93.61
+    },
+    "quantity": {
+      "raw": 18843432,
+      "extracted": 18843432,
+      "diff": 0,
+      "pct": 100.0
+    },
+    "revenue": {
+      "raw": 6940685447.61,
+      "extracted": 3470354406.73,
+      "diff": -3470331040.88,
+      "pct": 50.0
+    },
+    "by_region": {
+      "Gauteng": {
+        "raw_qty": 12096797,
+        "extracted_qty": 12096797,
+        "diff": 0,
+        "pct": 100.0
+      },
+      "Hardware": {
+        "raw_qty": 2917892,
+        "extracted_qty": 2917892,
+        "diff": 0,
+        "pct": 100.0
+      },
+      "George": {
+        "raw_qty": 1128424,
+        "extracted_qty": 1128424,
+        "diff": 0,
+        "pct": 100.0
+      },
+      "Cape Town": {
+        "raw_qty": 348739,
+        "extracted_qty": 348739,
+        "diff": 0,
+        "pct": 100.0
+      },
+      "Polokwane": {
+        "raw_qty": 1412570,
+        "extracted_qty": 1412570,
+        "diff": 0,
+        "pct": 100.0
+      },
+      "Unknown": {
+        "raw_qty": 939010,
+        "extracted_qty": 939010,
+        "diff": 0,
+        "pct": 100.0
+      }
+    }
+  }
+}
